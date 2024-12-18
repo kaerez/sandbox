@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adblockers Subscribe Helper</title>
+    <title>Adblockers Subscription Adder</title>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams(window.location.search);
@@ -12,7 +12,15 @@
 
             if (location) {
                 const targetUrl = `https://subscribe.adblockplus.org?location=${encodeURIComponent(location)}&amptitle=${encodeURIComponent(title || '')}`;
-                window.location.href = targetUrl;
+                const escapedTargetUrl = targetUrl.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                const escapedTitle = (title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+                document.body.innerHTML = `
+                    <h1>Add this filter?</h1>
+                    <p><code>${escapedTargetUrl}</code></p>
+                    <p>Title: <code>${escapedTitle}</code></p>
+                    <p><a href="${targetUrl}">Click here to go to the target URL</a></p>
+                `;
             } else {
                 document.body.innerHTML = `
                     <h1>Syntax</h1>
